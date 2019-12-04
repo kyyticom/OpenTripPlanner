@@ -1,23 +1,27 @@
-FROM openjdk:8u121-jre-alpine
-MAINTAINER Reittiopas version: 0.1
-
-RUN apk add --update curl bash ttf-dejavu && \
-    rm -rf /var/cache/apk/*
-VOLUME /opt/opentripplanner/graphs
+FROM maven:3-jdk-11 as builder
 
 ENV OTP_ROOT="/opt/opentripplanner"
-ENV ROUTER_DATA_CONTAINER_URL="https://api.digitransit.fi/routing-data/v2/finland"
+WORKDIR ${OTP_ROOT}/
 
-WORKDIR ${OTP_ROOT}
+COPY pom.xml ${OTP_ROOT}/
+RUN mvn dependency:go-offline
 
-ADD run.sh ${OTP_ROOT}/run.sh
-ADD target/*-shaded.jar ${OTP_ROOT}/otp-shaded.jar
+COPY . ${OTP_ROOT}/
 
+ENV MAVEN_OPTS="-Xmx4000M"
+
+# Build OTP
+RUN mvn package
+
+FROM openjdk:11
+
+ENV OTP_ROOT="/opt/opentripplanner/"
+WORKDIR ${OTP_ROOT}/
+
+COPY --from=builder /opt/opentripplanner/target/*-shaded.jar ./otp-shaded.jar
+
+ENV JAVA_OPTS="-Xms8G -Xmx8G"
 ENV PORT=8080
 EXPOSE ${PORT}
-ENV SECURE_PORT=8081
-EXPOSE ${SECURE_PORT}
-ENV ROUTER_NAME=finland
-ENV JAVA_OPTS="-Xms8G -Xmx8G"
 
-ENTRYPOINT exec ./run.sh
+CMD ["sh", "-c", "java ${JAVA_OPTS} -jar otp-shaded.jar --basePath ${OTP_ROOT} --router finland --server"]
