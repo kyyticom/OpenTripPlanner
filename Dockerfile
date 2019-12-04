@@ -1,4 +1,4 @@
-FROM maven:3-jdk-11 as builder
+FROM maven:3-jdk-8 as builder
 
 ENV OTP_ROOT="/opt/opentripplanner"
 WORKDIR ${OTP_ROOT}/
