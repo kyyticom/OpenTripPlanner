@@ -13,13 +13,16 @@ jobs:
       branch:
         description: Name of the branch of the data build
         type: string
+      workflow:
+        description: Name of the workflow to be startd
+        type: string
     steps:
       - deploy:
           name: Send webhook to start datacontainer build
           command: |
             curl -u ${DATA_CONTAINER_CIRCLE_APIKEY}: \
-                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/<<parameters.repo>>/tree/<<parameters.branch>>
-
+                -d build_parameters[CIRCLE_JOB]=<<parameters.workflow>>
+                https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/<<parameters.repo>>/tree/<<parameters.branch>>
 
 workflows:
   build_and_push_image:
@@ -33,6 +36,7 @@ workflows:
       - build-data-container:
           repo: matkahuolto-data-container
           branch: otp-1
+          workflow: build_and_push_image
           filters:
             branches:
               only: hsldevcom
