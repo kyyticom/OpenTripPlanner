@@ -20,9 +20,8 @@ jobs:
       - deploy:
           name: Send webhook to start datacontainer build
           command: |
-            curl -u ${DATA_CONTAINER_CIRCLE_APIKEY}: \
-                -d build_parameters[CIRCLE_JOB]=<<parameters.workflow>> \
-                https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/<<parameters.repo>>/tree/<<parameters.branch>>
+            curl -X POST \
+                https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/<<parameters.repo>>/build?circle-token=${DATA_CONTAINER_CIRCLE_APIKEY}&branch=<<parameters.branch>>
 
 workflows:
   build_and_push_image:
