@@ -37,6 +37,8 @@ workflows:
           repo: matkahuolto-data-container
           branch: otp-1
           workflow: build_and_push_image
+          requires:
+            - gcp-gcr/build-and-push-image
           filters:
             branches:
               only: hsldevcom
