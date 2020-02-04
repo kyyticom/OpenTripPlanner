@@ -254,7 +254,32 @@ public class StreetEdge extends Edge implements Cloneable {
         StateEditor editor = doTraverse(s0, options, s0.getNonTransitMode());
         State state = (editor == null) ? null : editor.makeState();
         /* Kiss and ride support. Mode transitions occur without the explicit loop edges used in park-and-ride. */
-        if (options.kissAndRide || options.rideAndKiss) {
+        if (options.kissAndRide && options.rideAndKiss) {
+            if (!s0.isCarParked() && !s0.isEverBoarded() && currMode == TraverseMode.CAR) {
+                editor = doTraverse(s0, options, TraverseMode.WALK);
+                if (editor != null) {
+                    editor.setCarParked(true); // Also has the effect of switching to WALK
+                    State forkState = editor.makeState();
+                    if (forkState != null) {
+                        forkState.addToExistingResultChain(state);
+                        return forkState; // return both parked and unparked states
+                    }
+                }
+            }
+            // Branch search to "unparked" CAR mode ASAP after transit has been used.
+            // Final WALK check prevents infinite recursion.
+            if (s0.isCarParked() && s0.isEverBoarded() && currMode == TraverseMode.WALK) {
+                editor = doTraverse(s0, options, TraverseMode.CAR);
+                if (editor != null) {
+                    editor.setCarParked(false); // Also has the effect of switching to CAR
+                    State forkState = editor.makeState();
+                    if (forkState != null) {
+                        forkState.addToExistingResultChain(state);
+                        return forkState; // return both parked and unparked states
+                    }
+                }
+            }
+        } else if (options.kissAndRide || options.rideAndKiss) {
             // Use of ride and kiss (instead of kiss and ride) will reverse the following car/walk mode change
             if (options.arriveBy ^ options.rideAndKiss) {
                 // Branch search to "unparked" CAR mode ASAP after transit has been used.
