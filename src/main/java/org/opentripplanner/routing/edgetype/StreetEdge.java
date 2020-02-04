@@ -515,6 +515,9 @@ public class StreetEdge extends Edge implements Cloneable {
 
         /* On the pre-kiss/pre-park leg, limit both walking and driving, either soft or hard. */
         if (options.kissAndRide || options.parkAndRide || options.rideAndKiss) {
+            if (traverseMode.isDriving()) {
+                weight *= options.kissRideFactor;
+            }
             if (options.arriveBy) {
                 if (!s0.isCarParked()) s1.incrementPreTransitTime(roundedTime);
             } else {
