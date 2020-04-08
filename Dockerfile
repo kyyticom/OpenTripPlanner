@@ -3,6 +3,14 @@ FROM maven:3-jdk-11 as builder
 ENV OTP_ROOT="/opt/opentripplanner"
 WORKDIR ${OTP_ROOT}/
 
+RUN cd /opt
+
+RUN git clone -b gtfs-flex-2 https://github.com/kyyticom/onebusaway-gtfs-modules \
+      && cd onebusaway-gtfs-modules \
+      && mvn install || :
+
+run cd ${OTP_ROOT}
+
 COPY pom.xml ${OTP_ROOT}/
 RUN mvn dependency:go-offline
 
