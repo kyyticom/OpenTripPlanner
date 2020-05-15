@@ -4,22 +4,26 @@ import org.locationtech.jts.geom.Envelope;
 import org.opentripplanner.api.parameter.BoundingBox;
 import org.opentripplanner.geocoder.Geocoder;
 import org.opentripplanner.geocoder.GeocoderResults;
+import org.opentripplanner.geocoder.google.GoogleGeocoder;
+import org.opentripplanner.standalone.server.OTPServer;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 /**
  * Maybe the internal geocoder resource should just chain to defined external geocoders?
  */
-@Path("/geocode")
+@Path("/routers/{routerId}/geocode")
 public class ExternalGeocoderResource {
-  
-// uncommenting injectparam will require a specific Geocoder to be instantiated
-//    @InjectParam 
+
+    @Context
+    protected OTPServer otpServer;
+
     public Geocoder geocoder;
     
     @GET
@@ -30,6 +34,11 @@ public class ExternalGeocoderResource {
         if (address == null) {
             throw new BadRequestException("no address");
         }
+
+        geocoder = otpServer.getRouter().routerConfig.getGoogleApiKey() != null
+            ? new GoogleGeocoder(otpServer.getRouter().routerConfig.getGoogleApiKey())
+            : null;
+
         Envelope env = (bbox == null) ? null : bbox.envelope();
         return geocoder.geocode(address, env);
     }
