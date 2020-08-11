@@ -108,7 +108,10 @@ public class State implements Cloneable {
         this.stateData.usingRentedBike = false;
         /* If the itinerary is to begin with a car that is left for transit, the initial state of arriveBy searches is
            with the car already "parked" and in WALK mode. Otherwise, we are in CAR mode and "unparked". */
-        if (options.parkAndRide || options.kissAndRide) {
+        if ((options.parkAndRide || options.kissAndRide) && options.rideAndKiss) {
+            this.stateData.carParked = false;
+            this.stateData.nonTransitMode = TraverseMode.CAR;
+        } else if (options.parkAndRide || options.kissAndRide) {
             this.stateData.carParked = options.arriveBy;
             this.stateData.nonTransitMode = this.stateData.carParked ? TraverseMode.WALK : TraverseMode.CAR;
         } else if (options.bikeParkAndRide) {
@@ -288,11 +291,11 @@ public class State implements Cloneable {
             bikeRentingOk = !isBikeRenting();
             bikeParkAndRideOk = !bikeParkAndRide || !isBikeParked();
             carParkAndRideOk = !parkAndRide || !isCarParked();
-            carRideAndParkOk = !rideAndPark || isCarParked();
+            carRideAndParkOk = !rideAndPark || (parkAndRide ? !isCarParked() : isCarParked());
         } else {
             bikeRentingOk = !isBikeRenting();
             bikeParkAndRideOk = !bikeParkAndRide || isBikeParked();
-            carParkAndRideOk = !parkAndRide || isCarParked();
+            carParkAndRideOk = !parkAndRide || (rideAndPark ? !isCarParked() : isCarParked());
             carRideAndParkOk = !rideAndPark || !isCarParked();
         }
         return bikeRentingOk && bikeParkAndRideOk && carParkAndRideOk && carRideAndParkOk;
