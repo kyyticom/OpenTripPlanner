@@ -7,12 +7,12 @@ RUN cd /opt
 
 RUN git clone -b gtfs-flex-2 https://github.com/kyyticom/onebusaway-gtfs-modules \
       && cd onebusaway-gtfs-modules \
-      && mvn install || :
+      && mvn install --no-transfer-progress || :
 
 run cd ${OTP_ROOT}
 
 COPY pom.xml ${OTP_ROOT}/
-RUN mvn dependency:go-offline
+RUN mvn dependency:go-offline --no-transfer-progress
 
 COPY . ${OTP_ROOT}/
 
