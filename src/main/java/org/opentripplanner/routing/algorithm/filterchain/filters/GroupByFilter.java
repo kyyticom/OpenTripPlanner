@@ -72,7 +72,7 @@ public class GroupByFilter<T extends GroupId<T>> implements ItineraryFilter {
         groups.removeIf(g -> g.itineraries.isEmpty());
 
         final int groupMaxLimit = groupMaxLimit(minLimit, groups.size());
-        final ItineraryFilter maxLimitFilter = new MaxLimitFilter(name(), groupMaxLimit);
+        final ItineraryFilter maxLimitFilter = new MaxLimitFilter(name(), groupMaxLimit, null);
 
         List<Itinerary> result = new ArrayList<>();
         for (Entry<T> e : groups) {

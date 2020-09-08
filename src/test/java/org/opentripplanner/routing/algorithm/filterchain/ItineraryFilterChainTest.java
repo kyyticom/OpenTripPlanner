@@ -89,7 +89,7 @@ public class ItineraryFilterChainTest {
     assertFalse(i2.systemNotices.isEmpty());
     assertFalse(i3.systemNotices.isEmpty());
     assertEquals("transit-vs-street-filter", i2.systemNotices.get(0).tag);
-    assertEquals("latest-departure-time-limit", i3.systemNotices.get(0).tag);
+    assertEquals("number-of-itineraries-filter", i3.systemNotices.get(0).tag);
   }
 
   @Test

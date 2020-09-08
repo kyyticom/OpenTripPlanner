@@ -20,7 +20,7 @@ public class MaxLimitFilterTest {
 
     @Test
     public void name() {
-        MaxLimitFilter subject = new MaxLimitFilter("Test", 3);
+        MaxLimitFilter subject = new MaxLimitFilter("Test", 3, null);
         assertEquals("Test", subject.name());
     }
 
@@ -28,13 +28,13 @@ public class MaxLimitFilterTest {
     public void testNormalFilter() {
         MaxLimitFilter subject;
 
-        subject = new MaxLimitFilter("Test", 3);
+        subject = new MaxLimitFilter("Test", 3, null);
         assertEquals(toStr(itineraries), toStr(subject.filter(itineraries)));
 
-        subject = new MaxLimitFilter("Test", 1);
+        subject = new MaxLimitFilter("Test", 1, null);
         assertEquals(toStr(List.of(i1)), toStr(subject.filter(itineraries)));
 
-        subject = new MaxLimitFilter("Test", 0);
+        subject = new MaxLimitFilter("Test", 0, null);
         assertEquals(toStr(List.of()), toStr(subject.filter(itineraries)));
     }
 }

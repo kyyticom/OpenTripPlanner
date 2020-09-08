@@ -4,7 +4,6 @@ import org.opentripplanner.model.plan.Itinerary;
 import org.opentripplanner.routing.algorithm.filterchain.filters.DebugFilterWrapper;
 import org.opentripplanner.routing.algorithm.filterchain.filters.FilterChain;
 import org.opentripplanner.routing.algorithm.filterchain.filters.GroupBySimilarLegsFilter;
-import org.opentripplanner.routing.algorithm.filterchain.filters.LatestDepartureTimeFilter;
 import org.opentripplanner.routing.algorithm.filterchain.filters.MaxLimitFilter;
 import org.opentripplanner.routing.algorithm.filterchain.filters.OtpDefaultSortOrder;
 import org.opentripplanner.routing.algorithm.filterchain.filters.RemoveTransitIfStreetOnlyIsBetterFilter;
@@ -179,6 +178,7 @@ public class ItineraryFilterChainBuilder {
                 new MaxLimitFilter(
                     "number-of-itineraries-filter",
                     maxNumberOfItineraries,
+                    latestDepartureTimeLimit,
                     maxLimitReachedSubscriber
                 )
             );
@@ -196,10 +196,6 @@ public class ItineraryFilterChainBuilder {
         {
             if (removeTransitWithHigherCostThanBestOnStreetOnly) {
                 filters.add(new RemoveTransitIfStreetOnlyIsBetterFilter());
-            }
-
-            if (latestDepartureTimeLimit != null) {
-                filters.add(new LatestDepartureTimeFilter(latestDepartureTimeLimit));
             }
         }
 
