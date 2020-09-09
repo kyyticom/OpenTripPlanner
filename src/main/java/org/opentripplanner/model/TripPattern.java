@@ -195,6 +195,7 @@ public class TripPattern extends TransitEntity<FeedScopedId> implements Cloneabl
     }
 
     public LineString getGeometry() {
+        if (hopGeometries == null) return null;
         List<LineString> lineStrings = new ArrayList<>();
         for (int i = 0; i < hopGeometries.length - 1; i++) {
             lineStrings.add(getHopGeometry(i));
