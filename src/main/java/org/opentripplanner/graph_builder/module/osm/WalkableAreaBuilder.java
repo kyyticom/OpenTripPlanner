@@ -74,7 +74,7 @@ public class WalkableAreaBuilder {
 
     private DataImportIssueStore issueStore;
 
-    public static final int MAX_AREA_NODES = 500;
+    public static final int MAX_AREA_NODES = 1000;
 
     public static final double VISIBILITY_EPSILON = 0.000000001;
 
