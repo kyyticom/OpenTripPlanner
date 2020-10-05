@@ -149,8 +149,8 @@ public class RoutingWorker {
         this.debugAggregator.finishedPatternFiltering();
 
         // Prepare access/egress transfers
-        Collection<NearbyStop> accessStops = AccessEgressRouter.streetSearch(request, false, 2000);
-        Collection<NearbyStop> egressStops = AccessEgressRouter.streetSearch(request, true, 2000);
+        Collection<NearbyStop> accessStops = AccessEgressRouter.streetSearch(request, false, 2500);
+        Collection<NearbyStop> egressStops = AccessEgressRouter.streetSearch(request, true, 2500);
 
         AccessEgressMapper accessEgressMapper = new AccessEgressMapper(transitLayer.getStopIndex());
         Collection<AccessEgress> accessTransfers = accessEgressMapper.mapNearbyStops(accessStops, false);
