@@ -175,6 +175,11 @@ public class NodeAdapter {
         return param(paramName).asText();
     }
 
+    public List<String> asTexts(String paramName, List<String> defaultValue) {
+        if(!exist(paramName)) return defaultValue;
+        return arrayAsList(paramName, JsonNode::asText);
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends Enum<T>> T asEnum(String paramName, T defaultValue) {
         String valueAsString = asText(paramName, defaultValue.name());

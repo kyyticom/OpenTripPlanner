@@ -5,6 +5,7 @@ import org.opentripplanner.routing.algorithm.raptor.transit.TransitTuningParamet
 import org.opentripplanner.transit.raptor.api.request.DynamicSearchWindowCoefficients;
 import org.opentripplanner.transit.raptor.api.request.RaptorTuningParameters;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,6 +22,8 @@ public final class TransitRoutingConfig
     private final int iterationDepartureStepInSeconds;
     private final int searchThreadPoolSize;
     private final Map<TransferPriority, Integer> stopTransferCost;
+    private final List<String> preferredFeeds;
+    private final int nonPreferredFeedCost;
     private final DynamicSearchWindowCoefficients dynamicSearchWindowCoefficients;
 
     public TransitRoutingConfig(NodeAdapter c) {
@@ -51,6 +54,8 @@ public final class TransitRoutingConfig
             TransferPriority.class,
             NodeAdapter::asInt
         );
+        this.preferredFeeds = c.asTexts("preferredFeeds", null);
+        this.nonPreferredFeedCost = c.asInt("nonPreferredFeedCost", 0);
     }
 
     @Override
@@ -86,6 +91,16 @@ public final class TransitRoutingConfig
     @Override
     public Integer stopTransferCost(TransferPriority key) {
         return stopTransferCost.get(key);
+    }
+
+    @Override
+    public boolean enableStopFeedPriority() {
+        return preferredFeeds != null && !preferredFeeds.isEmpty() && nonPreferredFeedCost != 0;
+    }
+
+    @Override
+    public Integer stopTransferCostByFeed(String feedId) {
+        return preferredFeeds.contains(feedId) ? 0 : nonPreferredFeedCost;
     }
 
     private static class DynamicSearchWindowConfig

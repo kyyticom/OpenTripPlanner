@@ -26,6 +26,9 @@ public interface TransitTuningParameters {
       }
       throw new IllegalArgumentException("Unknown key: " + key);
     }
+
+    @Override public boolean enableStopFeedPriority() { return false; }
+    @Override public Integer stopTransferCostByFeed(String feedId) { return null; }
   };
 
   /**
@@ -39,4 +42,16 @@ public interface TransitTuningParameters {
    * boarding and alighting all stops with the given priority.
    */
   Integer stopTransferCost(TransferPriority key);
+
+  /**
+   * Return {@code true} to include a cost for each stop for boarding and alighting at the stop
+   * given the stop's Feed.
+   */
+  boolean enableStopFeedPriority();
+
+  /**
+   * The stop transfer cost for the given by its Feed id. The cost applied to
+   * boarding and alighting all stops with the given priority.
+   */
+  Integer stopTransferCostByFeed(String feedId);
 }

@@ -66,14 +66,21 @@ public class StopIndexForRaptor {
         List<Stop> stops,
         TransitTuningParameters tuningParams
     ) {
-        if(!tuningParams.enableStopTransferPriority()) {
+        if(!tuningParams.enableStopTransferPriority() && !tuningParams.enableStopFeedPriority()) {
             return null;
         }
         int[] stopVisitCosts = new int[stops.size()];
 
         for (int i=0; i<stops.size(); ++i) {
-            TransferPriority priority = stops.get(i).getCostPriority();
-            int domainCost = tuningParams.stopTransferCost(priority);
+            Stop stop = stops.get(i);
+            TransferPriority priority = stop.getCostPriority();
+            int domainCost = 0;
+            if (tuningParams.enableStopTransferPriority()) {
+                domainCost += tuningParams.stopTransferCost(priority);
+            }
+            if (tuningParams.enableStopFeedPriority()) {
+                domainCost += tuningParams.stopTransferCostByFeed(stop.getId().getFeedId());
+            }
             stopVisitCosts[i] = RaptorCostConverter.toRaptorCost(domainCost);
         }
         return stopVisitCosts;
