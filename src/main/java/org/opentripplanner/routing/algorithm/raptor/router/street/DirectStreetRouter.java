@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DirectStreetRouter {
 
@@ -43,6 +44,7 @@ public class DirectStreetRouter {
 
       // Convert the internal GraphPaths to itineraries
       List<Itinerary> response = GraphPathToItineraryMapper.mapItineraries(paths, request);
+      response = response.stream().filter(itinerary -> !itinerary.nonTransitLimitExceeded).collect(Collectors.toList());
       ItinerariesHelper.decorateItinerariesWithRequestData(response, request);
       return response;
     }
