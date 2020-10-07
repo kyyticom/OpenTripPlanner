@@ -39,8 +39,7 @@ public class LegacyGraphQLPlanImpl implements LegacyGraphQLDataFetchers.LegacyGr
     return environment -> getSource(environment)
         .getRoutingErrors()
         .stream()
-        .map(routingError -> routingError.code)
-        .map(Enum::name)
+        .map(routingError -> routingError.code.name() + (routingError.inputField != null ? ("_" + routingError.inputField.name()) : ""))
         .collect(Collectors.toList());
   }
 
