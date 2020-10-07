@@ -23,7 +23,9 @@ public final class TransitRoutingConfig
     private final int searchThreadPoolSize;
     private final Map<TransferPriority, Integer> stopTransferCost;
     private final List<String> preferredFeeds;
+    private final List<String> unpreferredFeeds;
     private final int nonPreferredFeedCost;
+    private final int unpreferredFeedCost;
     private final DynamicSearchWindowCoefficients dynamicSearchWindowCoefficients;
 
     public TransitRoutingConfig(NodeAdapter c) {
@@ -54,8 +56,10 @@ public final class TransitRoutingConfig
             TransferPriority.class,
             NodeAdapter::asInt
         );
-        this.preferredFeeds = c.asTexts("preferredFeeds", null);
+        this.preferredFeeds = c.asTexts("preferredFeeds", List.of());
+        this.unpreferredFeeds = c.asTexts("unpreferredFeeds", List.of());
         this.nonPreferredFeedCost = c.asInt("nonPreferredFeedCost", 0);
+        this.unpreferredFeedCost = c.asInt("unpreferredFeedCost", 0);
     }
 
     @Override
@@ -95,12 +99,13 @@ public final class TransitRoutingConfig
 
     @Override
     public boolean enableStopFeedPriority() {
-        return preferredFeeds != null && !preferredFeeds.isEmpty() && nonPreferredFeedCost != 0;
+        return (!preferredFeeds.isEmpty() && nonPreferredFeedCost != 0)
+            || (!unpreferredFeeds.isEmpty() && unpreferredFeedCost != 0);
     }
 
     @Override
     public Integer stopTransferCostByFeed(String feedId) {
-        return preferredFeeds.contains(feedId) ? 0 : nonPreferredFeedCost;
+        return preferredFeeds.contains(feedId) ? 0 : unpreferredFeeds.contains(feedId) ? unpreferredFeedCost : nonPreferredFeedCost;
     }
 
     private static class DynamicSearchWindowConfig
