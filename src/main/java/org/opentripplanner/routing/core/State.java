@@ -210,7 +210,7 @@ public class State implements Cloneable {
         if (stateData.opt.arriveBy) {
             // Check that we are not renting a bike at the destination
             // Also check that a bike was rented if bikeRental is specified
-            bikeRentingOk = !isBikeRenting() && (!stateData.opt.bikeRental || hasUsedRentedBike());
+            bikeRentingOk = !isBikeRenting();
             bikeParkAndRideOk = !bikeParkAndRide || !isBikeParked();
             carParkAndRideOk = !parkAndRide || !isCarParked();
             // Checks that taxi has actually been used
@@ -218,7 +218,7 @@ public class State implements Cloneable {
         } else {
             // Check that we are not renting a bike at the destination
             // Also check that a bike was rented if bikeRental is specified
-            bikeRentingOk = !isBikeRenting() && (!stateData.opt.bikeRental || hasUsedRentedBike());
+            bikeRentingOk = !isBikeRenting();
             bikeParkAndRideOk = !bikeParkAndRide || isBikeParked();
             carParkAndRideOk = !parkAndRide || isCarParked();
             // Checks that taxi has actually been used
