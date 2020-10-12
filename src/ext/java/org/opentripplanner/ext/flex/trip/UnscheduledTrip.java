@@ -14,12 +14,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.opentripplanner.model.StopLocation.expandStops;
 import static org.opentripplanner.model.StopPattern.PICKDROP_NONE;
 
 
@@ -127,12 +127,6 @@ public class UnscheduledTrip extends FlexTrip<Integer> {
         .stream(stopTimes)
         .map(scheduledDeviatedStopTime -> scheduledDeviatedStopTime.stop)
         .collect(Collectors.toSet());
-  }
-
-  private Collection<StopLocation> expandStops(StopLocation stop) {
-    return stop instanceof FlexLocationGroup
-        ? ((FlexLocationGroup) stop).getLocations()
-        : Collections.singleton(stop);
   }
 
   private int getFromIndex(NearbyStop accessEgress) {
