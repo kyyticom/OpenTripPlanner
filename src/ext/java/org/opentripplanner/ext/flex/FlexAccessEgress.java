@@ -49,7 +49,9 @@ public class FlexAccessEgress<T> {
         flexTime
     );
     if (earliestAvailableTransitDepartureTime == -1) { return -1; }
-    return earliestAvailableTransitDepartureTime - preFlexTime + differenceFromStartOfTime;
+    int ret = earliestAvailableTransitDepartureTime - preFlexTime + differenceFromStartOfTime;
+    if (ret < departureTime) { return -1; }
+    return ret;
   }
 
   public int latestArrivalTime(int arrivalTime) {
@@ -61,6 +63,8 @@ public class FlexAccessEgress<T> {
         flexTime
     );
     if (latestAvailableTransitArrivalTime == -1) { return -1; }
-    return latestAvailableTransitArrivalTime + postFlexTime + differenceFromStartOfTime;
+    int ret = latestAvailableTransitArrivalTime + postFlexTime + differenceFromStartOfTime;
+    if (ret > arrivalTime) { return -1; }
+    return ret;
   }
 }

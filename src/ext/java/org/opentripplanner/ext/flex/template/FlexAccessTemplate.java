@@ -77,6 +77,11 @@ public class FlexAccessTemplate<T> extends FlexAccessEgressTemplate<T> {
 
       // Shift from departing at departureTime to arriving at departureTime
       timeShift = secondsFromStartOfTime + latestArrivalTime - flexTime - preFlexTime;
+
+      // If we would need to arrive after the search time
+      if (timeShift > departureTime) {
+        return null;
+      }
     } else {
       int firstStopDepartureTime = departureTime + preFlexTime - secondsFromStartOfTime;
       int earliestDepartureTime = trip.earliestDepartureTime(
@@ -90,6 +95,11 @@ public class FlexAccessTemplate<T> extends FlexAccessEgressTemplate<T> {
       }
 
       timeShift = secondsFromStartOfTime + earliestDepartureTime - preFlexTime;
+
+      // If we would need to depart before the search time
+      if (timeShift < departureTime) {
+        return null;
+      }
     }
 
     Itinerary itinerary = GraphPathToItineraryMapper.generateItinerary(
