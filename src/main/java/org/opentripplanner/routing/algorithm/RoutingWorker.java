@@ -163,6 +163,7 @@ public class RoutingWorker {
                 request.rctx.graph,
                 request.getDateTime().toInstant(),
                 request.arriveBy,
+                request.rctx.bannedRoutes,
                 ADDITIONAL_SEARCH_DAYS_BEFORE_TODAY,
                 ADDITIONAL_SEARCH_DAYS_AFTER_TODAY,
                 accessStops,

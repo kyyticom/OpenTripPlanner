@@ -9,6 +9,7 @@ import org.opentripplanner.ext.flex.flexpathcalculator.FlexPathCalculator;
 import org.opentripplanner.ext.flex.template.FlexAccessTemplate;
 import org.opentripplanner.ext.flex.template.FlexEgressTemplate;
 import org.opentripplanner.ext.flex.trip.FlexTrip;
+import org.opentripplanner.model.FeedScopedId;
 import org.opentripplanner.model.Stop;
 import org.opentripplanner.model.StopLocation;
 import org.opentripplanner.model.Transfer;
@@ -38,6 +39,7 @@ public class FlexRouter {
 
   /* Transit data */
   private final Graph graph;
+  private final Set<FeedScopedId> bannedRoutes;
   private final Collection<NearbyStop> streetAccesses;
   private final Collection<NearbyStop> streetEgresses;
   private final FlexIndex flexIndex;
@@ -56,15 +58,16 @@ public class FlexRouter {
   private final Collection<Transfer> transitTransfers;
 
   public FlexRouter(
-      Graph graph,
-      Instant searchInstant,
+      Graph graph, Instant searchInstant,
       boolean arriveBy,
+      Set<FeedScopedId> bannedRoutes,
       int additionalPastSearchDays,
       int additionalFutureSearchDays,
       Collection<NearbyStop> streetAccesses,
       Collection<NearbyStop> egressTransfers
   ) {
     this.graph = graph;
+    this.bannedRoutes = bannedRoutes;
     this.streetAccesses = streetAccesses;
     this.streetEgresses = egressTransfers;
     this.transitTransfers = graph.getTransferTable().getTransfers();
@@ -180,6 +183,7 @@ public class FlexRouter {
 
     // Fetch the closest flexTrips reachable from the access stops
     this.flexAccessTemplates = getClosestFlexTrips(streetAccesses)
+        .filter(t2 -> !bannedRoutes.contains(t2.second.getTrip().getRoute().getId()))
         // For each date the router has data for
         .flatMap(t2 -> Arrays.stream(dates)
             // Discard if service is not running on date
@@ -194,6 +198,7 @@ public class FlexRouter {
 
     // Fetch the closest flexTrips reachable from the egress stops
     this.flexEgressTemplates = getClosestFlexTrips(streetEgresses)
+        .filter(t2 -> !bannedRoutes.contains(t2.second.getTrip().getRoute().getId()))
         // For each date the router has data for
         .flatMap(t2 -> Arrays.stream(dates)
             // Discard if service is not running on date
