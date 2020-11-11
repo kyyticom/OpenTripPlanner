@@ -183,11 +183,10 @@ public class ContinuousPickupDropOffTrip extends FlexTrip<Double> {
       List<StreetEdge> edges = matcher.match(pattern.getHopGeometry(i));
       if (edges == null || edges.isEmpty()) { continue; }
 
-      var location = new FlexStopLocation();
       StopLocation stop = stopTime.stop;
       String id = tripId.getId() + "_" + stop.getId().getId();
       FeedScopedId feedScopedId = new FeedScopedId(tripId.getFeedId(), id);
-      location.setId(feedScopedId);
+      var location = new FlexStopLocation(feedScopedId);
       location.setName(stop.getName() + " -> " + stopTimes[i + 1].stop.getName());
       continuousStops[i] = location;
       graph.locationsById.put(feedScopedId, location);
