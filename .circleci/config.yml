@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  gcp-gcr: circleci/gcp-gcr@0.6.1
+  gcp-gcr: circleci/gcp-gcr@0.11.0
 
 workflows:
   build_and_push_image:
@@ -9,3 +9,12 @@ workflows:
       - gcp-gcr/build-and-push-image:
           image: opentripplanner-2
           registry-url: eu.gcr.io
+          tag: $CIRCLE_SHA1
+      - gcp-gcr/add-image-tag:
+          filters:
+            branches:
+              only: master
+          image: opentripplanner-2
+          registry-url: eu.gcr.io
+          source-tag: $CIRCLE_SHA1
+          target-tag: latest
