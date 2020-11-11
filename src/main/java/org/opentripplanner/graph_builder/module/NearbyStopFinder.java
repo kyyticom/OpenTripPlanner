@@ -182,8 +182,11 @@ public class NearbyStopFinder {
                 if (targetVertex instanceof TransitStopVertex && state.isFinal()) {
                     stopsFound.add(NearbyStop.nearbyStopForState(state, ((TransitStopVertex) targetVertex).getStop()));
                 }
-                if (OTPFeature.FlexRouting.isOn() && targetVertex instanceof StreetVertex
-                    && ((StreetVertex) targetVertex).flexStopLocations != null) {
+                if (OTPFeature.FlexRouting.isOn()
+                    && targetVertex instanceof StreetVertex
+                    && state.isFinal()
+                    && ((StreetVertex) targetVertex).flexStopLocations != null
+                ) {
                     for (FlexStopLocation flexStopLocation : ((StreetVertex) targetVertex).flexStopLocations) {
                         // This is for a simplification, so that we only return one vertex from each
                         // stop location. All vertices are added to the multimap, which is filtered

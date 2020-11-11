@@ -19,6 +19,8 @@ import org.opentripplanner.routing.graph.Vertex;
 import org.opentripplanner.routing.graphfinder.NearbyStop;
 import org.opentripplanner.routing.spt.GraphPath;
 import org.opentripplanner.routing.vertextype.TransitStopVertex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
 import java.util.Calendar;
@@ -29,6 +31,8 @@ import java.util.Map;
 import java.util.TimeZone;
 
 public class FlexAccessTemplate<T> extends FlexAccessEgressTemplate<T> {
+  private static final Logger LOG = LoggerFactory.getLogger(FlexAccessTemplate.class);
+
   public FlexAccessTemplate(
       NearbyStop accessEgress, FlexTrip<T> trip, T fromStopIndex, T toStopIndex,
       StopLocation transferStop, FlexServiceDate date, FlexPathCalculator<T> calculator
@@ -53,6 +57,10 @@ public class FlexAccessTemplate<T> extends FlexAccessEgressTemplate<T> {
 
     for (Edge e : egressEdges) {
       state = e.traverse(state);
+      if (state == null) {
+        LOG.warn("State is null after traversing {}", e);
+        return null;
+      }
     }
 
     int[] flexTimes = getFlexTimes(flexEdge, state);
