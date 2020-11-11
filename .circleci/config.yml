@@ -14,7 +14,22 @@ workflows:
           filters:
             branches:
               only: master
+          requires:
+            - gcp-gcr/build-and-push-image
           image: opentripplanner-2
           registry-url: eu.gcr.io
           source-tag: $CIRCLE_SHA1
           target-tag: latest
+
+  production-tag:
+    jobs:
+      - gcp-gcr/add-image-tag:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /production-\d.*/
+          image: opentripplanner-2
+          registry-url: eu.gcr.io
+          source-tag: $CIRCLE_SHA1
+          target-tag: prod
