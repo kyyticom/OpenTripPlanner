@@ -10,7 +10,7 @@ workflows:
           image: opentripplanner-2
           registry-url: eu.gcr.io
           tag: $CIRCLE_SHA1
-      - gcp-gcr/tag-image:
+      - gcp-gcr/add-image-tag:
           filters:
             branches:
               only: master
