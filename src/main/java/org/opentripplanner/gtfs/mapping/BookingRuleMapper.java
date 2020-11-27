@@ -16,7 +16,9 @@ class BookingRuleMapper {
         return MapUtils.mapToList(allBookingRules, this::map);
     }
 
-    /** Map from GTFS to OTP model, {@code null} safe.  */
+    /**
+     * Map from GTFS to OTP model, {@code null} safe.
+     */
     BookingRule map(org.onebusaway.gtfs.model.BookingRule orginal) {
         return orginal == null ? null : mappedBookingRules.computeIfAbsent(orginal, this::doMap);
     }
@@ -42,3 +44,4 @@ class BookingRuleMapper {
 
         return lhs;
     }
+}
