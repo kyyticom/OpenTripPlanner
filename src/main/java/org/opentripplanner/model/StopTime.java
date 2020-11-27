@@ -52,6 +52,11 @@ public final class StopTime implements Comparable<StopTime> {
     // Disabled by default
     private int flexContinuousDropOff = MISSING_VALUE;
 
+    /** Support for GTFS-Flex v2.1 booking rules */
+    private BookingRule pickupBookingRule;
+
+    private BookingRule dropOffBookingRule;
+
     public StopTime() { }
 
     public StopTime(StopTime st) {
@@ -71,6 +76,8 @@ public final class StopTime implements Comparable<StopTime> {
         this.flexWindowEnd = st.flexWindowEnd;
         this.flexContinuousPickup = st.flexContinuousPickup;
         this.flexContinuousDropOff = st.flexContinuousDropOff;
+        this.pickupBookingRule = st.pickupBookingRule;
+        this.dropOffBookingRule = st.dropOffBookingRule;
     }
 
     /**
@@ -253,6 +260,22 @@ public final class StopTime implements Comparable<StopTime> {
 
     public void setFlexContinuousDropOff(int flexContinuousDropOff) {
         this.flexContinuousDropOff = flexContinuousDropOff;
+    }
+
+    public BookingRule getPickupBookingRule() {
+        return pickupBookingRule;
+    }
+
+    public void setPickupBookingRule(BookingRule pickupBookingRule) {
+        this.pickupBookingRule = pickupBookingRule;
+    }
+
+    public BookingRule getDropOffBookingRule() {
+        return dropOffBookingRule;
+    }
+
+    public void setDropOffBookingRule(BookingRule dropOffBookingRule) {
+        this.dropOffBookingRule = dropOffBookingRule;
     }
 
     public int compareTo(StopTime o) {
