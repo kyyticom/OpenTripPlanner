@@ -70,6 +70,8 @@ class StopTimeMapper {
         lhs.setFlexWindowEnd(rhs.getMaxDepartureTime());
         lhs.setFlexContinuousPickup(rhs.getContinuousPickup());
         lhs.setFlexContinuousDropOff(rhs.getContinuousDropOff());
+        lhs.setPickupBookingRule(rhs.getPickupBookingRule());
+        lhs.setDropOffBookingRule(rhs.getDropOffBookingRule());
 
         // Skip mapping of proxy
         // private transient StopTimeProxy proxy;
