@@ -29,7 +29,7 @@ class StopTimeMapper {
         LocationMapper locationMapper,
         LocationGroupMapper locationGroupMapper,
         TripMapper tripMapper,
-        BookingRuleMapper bookingRuleMapper,
+        BookingRuleMapper bookingRuleMapper
     ) {
         this.stopMapper = stopMapper;
         this.locationMapper = locationMapper;
