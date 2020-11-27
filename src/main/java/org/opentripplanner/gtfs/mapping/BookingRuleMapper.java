@@ -3,6 +3,10 @@ package org.opentripplanner.gtfs.mapping;
 import org.opentripplanner.model.BookingRule;
 import org.opentripplanner.util.MapUtils;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 /** Responsible for mapping GTFS BookingRule into the OTP model. */
 class BookingRuleMapper {
 
