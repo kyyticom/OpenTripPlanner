@@ -14,7 +14,6 @@ class BookingRuleMapper {
 
     BookingRuleMapper(AgencyAndIdMapper agencyAndIdMapper) {
         this.agencyAndIdMapper = agencyAndIdMapper;
-        // Some other mappers?
     }
 
     Collection<BookingRule> map(Collection<org.onebusaway.gtfs.model.BookingRule> allBookingRules) {
