@@ -2,11 +2,11 @@ package org.opentripplanner.routing.algorithm.raptor.transit;
 
 import org.opentripplanner.model.Stop;
 
+import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,9 +15,10 @@ import java.util.stream.Collectors;
 public class TransitLayer {
 
   /**
-   * Transit data required for routing, indexed by each date it runs through.
+   * Transit data required for routing, indexed by each local date(Graph TimeZone) it runs through.
+   * A Trip "runs through" a date if any of its arrivals or departures is happening on that date.
    */
-  private final HashMap<LocalDate, List<TripPatternForDate>> tripPatternsByRunningPeriodDate;
+  private final HashMap<LocalDate, List<TripPatternForDate>> tripPatternsRunningOnDate;
 
   /**
    * Index of outer list is from stop index, inner list index has no specific meaning. To stop index
@@ -39,7 +40,7 @@ public class TransitLayer {
    */
   public TransitLayer(TransitLayer transitLayer) {
     this(
-        transitLayer.tripPatternsByRunningPeriodDate,
+        transitLayer.tripPatternsRunningOnDate,
         transitLayer.transferByStopIndex,
         transitLayer.stopIndex,
         transitLayer.transitDataZoneId
@@ -47,12 +48,12 @@ public class TransitLayer {
   }
 
   public TransitLayer(
-      Map<LocalDate, List<TripPatternForDate>> tripPatternsByRunningPeriodDate,
+      Map<LocalDate, List<TripPatternForDate>> tripPatternsRunningOnDate,
       List<List<Transfer>> transferByStopIndex,
       StopIndexForRaptor stopIndex,
       ZoneId transitDataZoneId
   ) {
-    this.tripPatternsByRunningPeriodDate = new HashMap<>(tripPatternsByRunningPeriodDate);
+    this.tripPatternsRunningOnDate = new HashMap<>(tripPatternsRunningOnDate);
     this.transferByStopIndex = transferByStopIndex;
     this.stopIndex = stopIndex;
     this.transitDataZoneId = transitDataZoneId;
@@ -62,6 +63,7 @@ public class TransitLayer {
     return stopIndex.indexByStop.get(stop);
   }
 
+  @Nullable
   public Stop getStopByIndex(int stop) {
     return stop != -1 ? this.stopIndex.stopsByIndex.get(stop) : null;
   }
@@ -71,7 +73,7 @@ public class TransitLayer {
   }
 
   public Collection<TripPatternForDate> getTripPatternsForDate(LocalDate date) {
-    return tripPatternsByRunningPeriodDate.getOrDefault(date, Collections.emptyList());
+    return tripPatternsRunningOnDate.getOrDefault(date, List.of());
   }
 
   /**
@@ -90,8 +92,8 @@ public class TransitLayer {
   }
 
   public List<TripPatternForDate> getTripPatternsRunningOnDateCopy(LocalDate runningPeriodDate) {
-    List<TripPatternForDate> tripPatternForDate = tripPatternsByRunningPeriodDate.get(runningPeriodDate);
-    return tripPatternForDate != null ? new ArrayList<>(tripPatternsByRunningPeriodDate.get(runningPeriodDate)) : null;
+    List<TripPatternForDate> tripPatternForDate = tripPatternsRunningOnDate.get(runningPeriodDate);
+    return tripPatternForDate != null ? new ArrayList<>(tripPatternForDate) : null;
   }
 
   public List<TripPatternForDate> getTripPatternsStartingOnDateCopy(LocalDate date) {
@@ -114,6 +116,6 @@ public class TransitLayer {
       LocalDate date,
       List<TripPatternForDate> tripPatternForDates
   ) {
-    this.tripPatternsByRunningPeriodDate.replace(date, tripPatternForDates);
+    this.tripPatternsRunningOnDate.replace(date, tripPatternForDates);
   }
 }
