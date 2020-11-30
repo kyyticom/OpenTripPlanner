@@ -10,6 +10,7 @@ import org.opentripplanner.ext.flex.flexpathcalculator.FlexPathCalculator;
 import org.opentripplanner.ext.flex.template.FlexAccessTemplate;
 import org.opentripplanner.ext.flex.template.FlexEgressTemplate;
 import org.opentripplanner.graph_builder.module.map.StreetMatcher;
+import org.opentripplanner.model.BookingRule;
 import org.opentripplanner.model.FeedScopedId;
 import org.opentripplanner.model.FlexStopLocation;
 import org.opentripplanner.model.StopLocation;
@@ -253,7 +254,8 @@ public class ContinuousPickupDropOffTrip extends FlexTrip<Double> {
     private final int dropOffType;
     private final int continuousPickupType;
     private final int continuousDropOffType;
-
+    private final BookingRule pickupBookingRule;
+    private final BookingRule dropOffBookingRule;
 
     private ContinuousPickupDropOffStopTime(StopTime st) {
       this.stop = st.getStop();
@@ -266,6 +268,9 @@ public class ContinuousPickupDropOffTrip extends FlexTrip<Double> {
 
       this.continuousPickupType = st.getFlexContinuousPickup();
       this.continuousDropOffType = st.getFlexContinuousDropOff();
+
+      this.pickupBookingRule = st.getPickupBookingRule();
+      this.dropOffBookingRule = st.getDropOffBookingRule();
     }
   }
 }

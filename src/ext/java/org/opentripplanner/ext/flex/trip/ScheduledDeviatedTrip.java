@@ -5,6 +5,7 @@ import org.opentripplanner.ext.flex.flexpathcalculator.FlexPathCalculator;
 import org.opentripplanner.ext.flex.flexpathcalculator.ScheduledFlexPathCalculator;
 import org.opentripplanner.ext.flex.template.FlexAccessTemplate;
 import org.opentripplanner.ext.flex.template.FlexEgressTemplate;
+import org.opentripplanner.model.BookingRule;
 import org.opentripplanner.model.FlexLocationGroup;
 import org.opentripplanner.model.Stop;
 import org.opentripplanner.model.StopLocation;
@@ -170,6 +171,8 @@ public class ScheduledDeviatedTrip extends FlexTrip<Integer> {
     private final int arrivalTime;
     private final int pickupType;
     private final int dropOffType;
+    private final BookingRule pickupBookingRule;
+    private final BookingRule dropOffBookingRule;
 
     private ScheduledDeviatedStopTime(StopTime st) {
       this.stop = st.getStop();
@@ -184,6 +187,9 @@ public class ScheduledDeviatedTrip extends FlexTrip<Integer> {
 
       this.pickupType = st.getPickupType();
       this.dropOffType = st.getDropOffType();
+
+      this.pickupBookingRule = st.getPickupBookingRule();
+      this.dropOffBookingRule = st.getDropOffBookingRule();
     }
   }
 }
