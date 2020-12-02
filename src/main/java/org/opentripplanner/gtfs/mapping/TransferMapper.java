@@ -3,6 +3,7 @@ package org.opentripplanner.gtfs.mapping;
 import org.opentripplanner.model.Route;
 import org.opentripplanner.model.Stop;
 import org.opentripplanner.model.Transfer;
+import org.opentripplanner.model.TransferPriority;
 import org.opentripplanner.model.TransferType;
 import org.opentripplanner.model.Trip;
 
@@ -60,6 +61,14 @@ class TransferMapper {
 
         Collection<Stop> fromStops = getStopOrChildStops(rhs.getFromStop());
         Collection<Stop> toStops = getStopOrChildStops(rhs.getToStop());
+
+        for (Stop stop : new Stop[]{stopMapper.map(rhs.getFromStop()), stopMapper.map(rhs.getToStop())}) {
+          if (stop != null && stop.getTransferPriority() == TransferPriority.ALLOWED) {
+            if (transferType == TransferType.GUARANTEED) {
+              stop.setTransferPriority(TransferPriority.PREFERRED);
+            }
+          }
+        }
 
         Collection<Transfer> lhs = new ArrayList<>();
 

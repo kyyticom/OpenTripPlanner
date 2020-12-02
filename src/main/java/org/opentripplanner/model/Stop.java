@@ -38,6 +38,8 @@ public final class Stop extends StationElement implements StopLocation {
 
   private HashSet<BoardingArea> boardingAreas;
 
+  private TransferPriority costTransferPriority = TransferPriority.ALLOWED;
+
   public Stop(
       FeedScopedId id,
       String name,
@@ -122,13 +124,21 @@ public final class Stop extends StationElement implements StopLocation {
     return boardingAreas != null ? boardingAreas : Collections.emptySet();
   }
 
+  public TransferPriority getTransferPriority() {
+    return costTransferPriority;
+  }
+
+  public void setTransferPriority(TransferPriority newPriority) {
+    costTransferPriority = newPriority;
+  }
+
   /**
    * Get the transfer cost priority for Stop. This will fetch the value from the parent
    * [if parent exist] or return the default value.
    */
   @NotNull
   public TransferPriority getCostPriority() {
-    return isPartOfStation() ? getParentStation().getCostPriority() : TransferPriority.ALLOWED;
+    return isPartOfStation() ? getParentStation().getCostPriority() : costTransferPriority;
   }
 
   public Collection<FareZone> getFareZones() {
