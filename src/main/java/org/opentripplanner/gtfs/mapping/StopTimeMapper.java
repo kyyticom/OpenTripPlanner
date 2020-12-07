@@ -66,8 +66,8 @@ class StopTimeMapper {
         lhs.setDropOffType(rhs.getDropOffType());
         lhs.setShapeDistTraveled(rhs.getShapeDistTraveled());
         lhs.setFarePeriodId(rhs.getFarePeriodId());
-        lhs.setFlexWindowStart(rhs.getMinArrivalTime());
-        lhs.setFlexWindowEnd(rhs.getMaxDepartureTime());
+        lhs.setFlexWindowStart(rhs.getStartPickupDropOffWindow());
+        lhs.setFlexWindowEnd(rhs.getEndPickupDropOffWindow());
         lhs.setFlexContinuousPickup(rhs.getContinuousPickup());
         lhs.setFlexContinuousDropOff(rhs.getContinuousDropOff());
 
