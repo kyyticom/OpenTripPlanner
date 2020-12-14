@@ -23,6 +23,12 @@ jobs:
       with:
         java-version: 11
 
+    - name: Build locally OneBusAway with gtfs-flex-2 support
+      run: |
+        git clone -b gtfs-flex-2 https://github.com/kyyticom/onebusaway-gtfs-modules
+        cd onebusaway-gtfs-modules
+        mvn -B -V install || :
+
     - name: Test
       run: mvn -B -V clean verify --settings maven-settings.xml -Dgpg.skip
 
