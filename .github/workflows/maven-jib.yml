@@ -36,7 +36,7 @@ jobs:
         CONTAINER_IMAGE=ghcr.io/$(echo "${GITHUB_REPOSITORY}" | tr A-Z a-z | tr -d _)
         JIB_ARGS="-Dimage=${CONTAINER_IMAGE}:${GITHUB_SHA} -Djib.container.mainClass=org.opentripplanner.standalone.OTPMain -Djib.container.labels=org.opencontainers.image.source=https://github.com/${GITHUB_REPOSITORY}"
 
-        if [ $BRANCH = dev-2.x -o $BRANCH = ci-github-action-container-image ];
+        if [ $BRANCH = dev-2.x -o $BRANCH = master ];
         then
           JIB_ACTION=build
           JIB_ARGS="${JIB_ARGS} -Djib.to.tags=latest"
