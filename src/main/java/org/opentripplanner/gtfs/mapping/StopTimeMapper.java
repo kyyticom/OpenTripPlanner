@@ -22,6 +22,8 @@ class StopTimeMapper {
 
     private final TripMapper tripMapper;
 
+    private final BookingRuleMapper bookingRuleMapper;
+
     private final Map<org.onebusaway.gtfs.model.StopTime, StopTime> mappedStopTimes = new HashMap<>();
 
     StopTimeMapper(

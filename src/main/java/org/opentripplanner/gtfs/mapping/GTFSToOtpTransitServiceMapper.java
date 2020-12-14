@@ -78,7 +78,7 @@ public class GTFSToOtpTransitServiceMapper {
         tripMapper = new TripMapper(routeMapper);
 
         agencyAndIdMapper = new AgencyAndIdMapper();
-        bookingRuleMapper = new BookingRuleMapper(agencyAndIdMapper);
+        bookingRuleMapper = new BookingRuleMapper();
         stopTimeMapper = new StopTimeMapper(
             stopMapper,
             locationMapper,

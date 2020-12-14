@@ -12,9 +12,7 @@ class BookingRuleMapper {
 
     private Map<org.onebusaway.gtfs.model.BookingRule, BookingRule> mappedBookingRules = new HashMap<>();
 
-    BookingRuleMapper(AgencyAndIdMapper agencyAndIdMapper) {
-        this.agencyAndIdMapper = agencyAndIdMapper;
-    }
+    BookingRuleMapper() {}
 
     Collection<BookingRule> map(Collection<org.onebusaway.gtfs.model.BookingRule> allBookingRules) {
         return MapUtils.mapToList(allBookingRules, this::map);
@@ -30,7 +28,7 @@ class BookingRuleMapper {
     private BookingRule doMap(org.onebusaway.gtfs.model.BookingRule rhs) {
         BookingRule lhs = new BookingRule();
 
-        lhs.setId(agencyAndIdMapper.map(rhs.getId()));
+        lhs.setId(AgencyAndIdMapper.mapAgencyAndId(rhs.getId()));
         lhs.setType(rhs.getType());
         lhs.setPriorNoticeDurationMin(rhs.getPriorNoticeDurationMin());
         lhs.setPriorNoticeDurationMax(rhs.getPriorNoticeDurationMax());
@@ -38,7 +36,7 @@ class BookingRuleMapper {
         lhs.setPriorNoticeLastTime(rhs.getPriorNoticeLastTime());
         lhs.setPriorNoticeStartDay(rhs.getPriorNoticeStartDay());
         lhs.setPriorNoticeStartTime(rhs.getPriorNoticeStartTime());
-        lhs.setPriorNoticeServiceId(agencyAndIdMapper.map(rhs.getPriorNoticeServiceId()));
+        lhs.setPriorNoticeServiceId(AgencyAndIdMapper.mapAgencyAndId(rhs.getPriorNoticeServiceId()));
         lhs.setMessage(rhs.getMessage());
         lhs.setPickupMessage(rhs.getPickupMessage());
         lhs.setDropOffMessage(rhs.getDropOffMessage());
