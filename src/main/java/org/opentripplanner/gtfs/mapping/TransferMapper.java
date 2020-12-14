@@ -1,8 +1,10 @@
 package org.opentripplanner.gtfs.mapping;
 
 import org.opentripplanner.model.Route;
+import org.opentripplanner.model.Station;
 import org.opentripplanner.model.Stop;
 import org.opentripplanner.model.Transfer;
+import org.opentripplanner.model.TransferPriority;
 import org.opentripplanner.model.TransferType;
 import org.opentripplanner.model.Trip;
 
@@ -60,6 +62,23 @@ class TransferMapper {
 
         Collection<Stop> fromStops = getStopOrChildStops(rhs.getFromStop());
         Collection<Stop> toStops = getStopOrChildStops(rhs.getToStop());
+
+        if (transferType == TransferType.GUARANTEED) {
+          for (org.onebusaway.gtfs.model.Stop gtfsStop :
+                 new org.onebusaway.gtfs.model.Stop[]{rhs.getFromStop(), rhs.getToStop()}) {
+            if (gtfsStop.getLocationType() == 0) {
+              Stop stop = stopMapper.map(gtfsStop);
+              if (stop != null && stop.getTransferPriority() == TransferPriority.ALLOWED) {
+                stop.setTransferPriority(TransferPriority.PREFERRED);
+              }
+            } else {
+              Station station = stationMapper.map(gtfsStop);
+              if (station != null && station.getCostPriority() != TransferPriority.PREFERRED) {
+                station.setCostPriority(TransferPriority.PREFERRED);
+              }
+            }
+          }
+        }
 
         Collection<Transfer> lhs = new ArrayList<>();
 

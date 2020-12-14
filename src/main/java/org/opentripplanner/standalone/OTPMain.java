@@ -2,7 +2,7 @@ package org.opentripplanner.standalone;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
-import org.opentripplanner.common.MavenVersion;
+import org.opentripplanner.common.ProjectInfo;
 import org.opentripplanner.datastore.DataSource;
 import org.opentripplanner.graph_builder.GraphBuilder;
 import org.opentripplanner.routing.graph.Graph;
@@ -16,6 +16,7 @@ import org.opentripplanner.util.ThrowableUtils;
 import org.opentripplanner.visualizer.GraphVisualizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
  * This is the main entry point to OpenTripPlanner. It allows both building graphs and starting up
@@ -28,11 +29,24 @@ public class OTPMain {
 
     private static final Logger LOG = LoggerFactory.getLogger(OTPMain.class);
 
+    static {
+
+        // Disable HSQLDB reconfiguration of Java Unified Logging (j.u.l)
+        //noinspection AccessOfSystemProperties
+        System.setProperty("hsqldb.reconfig_logging", "false");
+
+        // Remove existing handlers attached to the j.u.l root logger
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
+        // Bridge j.u.l (used by Jersey) to the SLF4J root logger, so all logging goes through the same API
+        SLF4JBridgeHandler.install();
+    }
+
     /**
      * ENTRY POINT: This is the main method that is called when running otp.jar from the command line.
      */
     public static void main(String[] args) {
         try {
+            LOG.info("OTP STARTED (" + ProjectInfo.INSTANCE.getLongVersionString() + ")");
             OtpStartupInfo.logInfo();
             CommandLineParameters params = parseAndValidateCmdLine(args);
             startOTPServer(params);
@@ -44,6 +58,9 @@ public class OTPMain {
         catch (Exception e) {
             LOG.error("An uncaught error occurred inside OTP: {}", e.getLocalizedMessage(), e);
             System.exit(-1);
+        }
+        finally {
+            LOG.info("OTP SHUTDOWN (" + ProjectInfo.INSTANCE.getLongVersionString() + ")");
         }
     }
 
@@ -59,18 +76,18 @@ public class OTPMain {
             // parsed commands, since there will be three separate objects.
             JCommander jc = JCommander.newBuilder().addObject(params).args(args).build();
             if (params.version) {
-                System.out.println(MavenVersion.VERSION.getLongVersionString());
+                System.out.println(ProjectInfo.INSTANCE.getLongVersionString());
                 System.exit(0);
             }
             if (params.help) {
-                System.out.println(MavenVersion.VERSION.getShortVersionString());
+                System.out.println(ProjectInfo.INSTANCE.getShortVersionString());
                 jc.setProgramName("java -Xmx4G -jar otp.jar");
                 jc.usage();
                 System.exit(0);
             }
             params.inferAndValidate();
         } catch (ParameterException pex) {
-            System.out.println(MavenVersion.VERSION.getShortVersionString());
+            System.out.println(ProjectInfo.INSTANCE.getShortVersionString());
             LOG.error("Parameter error: {}", pex.getMessage());
             System.exit(1);
         }

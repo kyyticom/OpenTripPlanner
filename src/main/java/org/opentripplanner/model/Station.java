@@ -23,7 +23,7 @@ public class Station extends TransitEntity implements StopCollection {
 
   private final WgsCoordinate coordinate;
 
-  private final TransferPriority costPriority;
+  private TransferPriority costPriority;
 
   /**
    * URL to a web page containing information about this particular station
@@ -96,6 +96,10 @@ public class Station extends TransitEntity implements StopCollection {
    */
   public TransferPriority getCostPriority() {
     return costPriority;
+  }
+
+  public void setCostPriority(TransferPriority newPriority) {
+    costPriority = newPriority;
   }
 
   public TimeZone getTimezone() {
