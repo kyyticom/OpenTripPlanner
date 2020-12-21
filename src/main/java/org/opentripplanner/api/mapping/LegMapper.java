@@ -99,6 +99,11 @@ public class LegMapper {
         api.boardRule = domain.boardRule;
         api.alightRule = domain.alightRule;
         api.rentedBike = domain.rentedBike;
+        api.flexDrtPickupMessage = domain.flexDrtPickupMessage;
+        api.flexDrtDropOffMessage = domain.flexDrtDropOffMessage;
+        api.flexDrtPhoneNumber = domain.flexDrtPhoneNumber;
+        api.flexDrtInfoUrl = domain.flexDrtInfoUrl;
+        api.flexDrtBookingUrl = domain.flexDrtBookingUrl;
 
         return api;
     }

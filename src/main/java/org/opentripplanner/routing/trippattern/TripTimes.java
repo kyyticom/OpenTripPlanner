@@ -372,6 +372,24 @@ public class TripTimes implements Serializable, Comparable<TripTimes>, Cloneable
     }
 
     /**
+     * Fetches pickup booking rule corresponding to the stop number in the trip
+     * @param stop - iterator in the trip
+     * @return pickup booking rule with all its properties
+     */
+    public BookingRule getPickupBookingRule(int stop) {
+        return pickupBookingRules[stop];
+    }
+
+    /**
+     * Fetches drop-off booking rule corresponding to the stop number in the trip
+     * @param stop - iterator in the trip
+     * @return drop-off booking rule with all its properties
+     */
+    public BookingRule getDropOffBookingRule(int stop) {
+        return dropOffBookingRules[stop];
+    }
+
+    /**
      * Calculates the earliest pickup time based on a stop's pickup booking rule (GTFS-Flex v2.1)
      * @param stop - iterator in the StopTimes collection
      * @param currTime - current time

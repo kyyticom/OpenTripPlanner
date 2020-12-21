@@ -2,6 +2,7 @@ package org.opentripplanner.routing.algorithm.mapping;
 
 import org.locationtech.jts.geom.Coordinate;
 import org.opentripplanner.common.geometry.SphericalDistanceLibrary;
+import org.opentripplanner.model.BookingRule;
 import org.opentripplanner.model.GenericLocation;
 import org.opentripplanner.model.Stop;
 import org.opentripplanner.model.TripPattern;
@@ -197,6 +198,29 @@ public class RaptorPathToItineraryMapper {
             firstLeg,
             request.locale
         );
+
+        BookingRule pickupBookingRule = tripTimes.getPickupBookingRule(boardStopIndexInPattern);
+        BookingRule dropOffBookingRule = tripTimes.getDropOffBookingRule(alightStopIndexInPattern);
+        leg.flexDrtPickupMessage = pickupBookingRule.getPickupMessage() == null ?
+            pickupBookingRule.getPickupMessage() :
+            pickupBookingRule.getMessage();
+        leg.flexDrtDropOffMessage = dropOffBookingRule.getDropOffMessage() == null ?
+            dropOffBookingRule.getDropOffMessage() :
+            dropOffBookingRule.getMessage();
+        // For pickup and drop-off booking rules of a leg, it is presumed that the phone number,
+        // info URL and booking URL are the same between the rules or are missing. Even though it
+        // is possible in theory to have a service that has dedicated (noncoinsiding) phone numbers
+        // and/or info pages for pickup and drop-off, practical usability of such a configuration
+        // is questionable. For the sake of simplicity, those properties are merged.   
+        leg.flexDrtPhoneNumber = pickupBookingRule.getPhoneNumber() == null ?
+            pickupBookingRule.getPhoneNumber() : 
+            dropOffBookingRule.getPhoneNumber();
+        leg.flexDrtInfoUrl = pickupBookingRule.getInfoUrl() == null ?
+            pickupBookingRule.getInfoUrl() :
+            dropOffBookingRule.getInfoUrl();
+        leg.flexDrtBookingUrl = pickupBookingRule.getUrl() == null ?
+            pickupBookingRule.getUrl() :
+            dropOffBookingRule.getUrl();
 
         return leg;
     }

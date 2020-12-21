@@ -154,6 +154,34 @@ public class Leg {
 
    public Boolean rentedBike;
 
+    /**
+    * Agency message if this leg has special pickup instructions defined in a booking rule   
+    */
+   public String flexDrtPickupMessage = null;
+
+   /**
+    * Agency message if this leg has special drop-off instructions defined in a booking rule 
+    */
+   public String flexDrtDropOffMessage = null;
+
+   /**
+    * Phone number if this leg has special instructions defined in a booking rule 
+    */
+   public String flexDrtPhoneNumber = null;
+
+   /**
+    * Info URL if this leg has special instructions defined in a booking rule. 
+    * Provides human-readable information about terma and conditions of that booking rule.
+    */
+   public String flexDrtInfoUrl = null;
+
+   /**
+    * Booking URL if this leg has special instructions defined in a booking rule.
+    * Provides either an online interface for the reservation system or
+    * download link for the app binary to make a reservation.  
+    */
+   public String flexDrtBookingUrl = null;
+
   /**
    * If a generalized cost is used in the routing algorithm, this should be the "delta" cost
    * computed by the algorithm for the section this leg account for. This is relevant for anyone
@@ -292,6 +320,8 @@ public class Leg {
                 .addStr("boardRule", boardRule)
                 .addStr("alightRule", alightRule)
                 .addBool("rentedBike", rentedBike)
+                .addStr("flexDrtPickupMessage", flexDrtPickupMessage)
+                .addStr("flexDrtDropOffMessage", flexDrtDropOffMessage)
                 .toString();
     }
 }
