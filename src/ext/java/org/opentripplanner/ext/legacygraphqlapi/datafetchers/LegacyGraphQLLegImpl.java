@@ -13,6 +13,7 @@ import org.opentripplanner.model.plan.StopArrival;
 import org.opentripplanner.model.plan.WalkStep;
 import org.opentripplanner.routing.RoutingService;
 import org.opentripplanner.util.model.EncodedPolylineBean;
+import org.opentripplanner.visibility.Environment;
 
 import java.util.List;
 import java.util.Objects;
@@ -182,6 +183,26 @@ public class LegacyGraphQLLegImpl implements LegacyGraphQLDataFetchers.LegacyGra
   @Override
   public DataFetcher<Boolean> interlineWithPreviousLeg() {
     return environment -> getSource(environment).interlineWithPreviousLeg;
+  }
+
+  public DataFetcher<String> flexDrtPickupMessage() {
+      return environment -> getSource(environment).flexDrtPickupMessage;
+  }
+
+  public DataFetcher<String> flexDrtDropOffMessage() {
+      return environment -> getSource(environment).flexDrtDropOffMessage; 
+  }
+
+  public DataFetcher<String> flexDrtPhoneNumber() {
+      return environment -> getSource(environment).flexDrtPhoneNumber;
+  }
+
+  public DataFetcher<String> flexDrtInfoUrl() {
+      return environment -> getSource(environment).flexDrtInfoUrl;
+  }
+
+  public DataFetcher<String> flexDrtBookingUrl() {
+      return environment -> getSource(environment).flexDrtBookingUrl;
   }
 
   private RoutingService getRoutingService(DataFetchingEnvironment environment) {

@@ -814,6 +814,38 @@ type Leg {
     and passenger can stay inside the vehicle.
     """
     interlineWithPreviousLeg: Boolean
+
+    """
+    For transit legs with booking rules, textual message to the passenger explaining how
+    to make a reservation and special procedure to board into that vehicle. 
+    """
+    flexDrtPickupMessage: String
+
+    """
+    For transit legs with booking rules, textual message to the passenger explaining how
+    to make a reservation and special procedure to alight from that vehicle. 
+    """
+    flexDrtDropOffMessage: String
+
+    """
+    For transit legs with booking rules, phone number to make an advance reservation. 
+    Separated into a dedicated field to let the apps to be able to attach a call action to it. 
+    """
+    flexDrtPhoneNumber: String
+
+    """
+    For transit legs with booking rules, URL pointing to info page describing the reservation,
+    boarding, and alighting in detail. 
+    Separated into a dedicated field to let the apps to be able to attach a browser action to it. 
+    """
+    flexDrtInfoUrl: String
+
+    """
+    For transit legs with booking rules, URL pointing to web interface or to a download page of
+    a dedicated app to make a reservation.
+    Separated into a dedicated field to let the apps to be able to attach a browser action to it. 
+    """
+    flexDrtBookingUrl: String
 }
 
 """Identifies whether this stop represents a stop or station."""
