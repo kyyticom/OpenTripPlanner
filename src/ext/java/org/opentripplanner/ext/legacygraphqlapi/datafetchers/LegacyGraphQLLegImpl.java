@@ -13,7 +13,6 @@ import org.opentripplanner.model.plan.StopArrival;
 import org.opentripplanner.model.plan.WalkStep;
 import org.opentripplanner.routing.RoutingService;
 import org.opentripplanner.util.model.EncodedPolylineBean;
-import org.opentripplanner.visibility.Environment;
 
 import java.util.List;
 import java.util.Objects;
