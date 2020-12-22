@@ -1,9 +1,9 @@
 /* This file is based on code copied from project OneBusAway, see the LICENSE file for further information. */
 package org.opentripplanner.model;
 
-public final class BookingRule {
+public final class BookingRule extends TransitEntity {
 
-    private FeedScopedId id;
+    private static final long serialVersionUID = 1L;
 
     private int type;
 
@@ -33,12 +33,12 @@ public final class BookingRule {
 
     private String url;
 
-    public BookingRule() {
-
+    public BookingRule(FeedScopedId id) {
+        super(id);
     }
 
     public BookingRule(BookingRule br) {
-        this.id = br.id;
+        super(br.getId());
         this.type = br.type;
         this.priorNoticeDurationMin = br.priorNoticeDurationMin;
         this.priorNoticeDurationMax = br.priorNoticeDurationMax;
@@ -53,14 +53,6 @@ public final class BookingRule {
         this.phoneNumber = br.phoneNumber;
         this.infoUrl = br.infoUrl;
         this.url = br.url;
-    }
-
-    public FeedScopedId getId() {
-        return id;
-    }
-
-    public void setId(FeedScopedId id) {
-        this.id = id;
     }
 
     public int getType() {
@@ -177,6 +169,6 @@ public final class BookingRule {
 
     @Override
     public String toString() {
-        return "<BookingRule " + this.id + ">";
+        return "<BookingRule " + getId() + ">";
     }
 }

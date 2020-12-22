@@ -56,9 +56,7 @@ public class GTFSToOtpTransitServiceMapper {
 
     private final TripMapper tripMapper;
 
-    private final AgencyAndIdMapper agencyAndIdMapper;
-
-    private final BookingRuleMapper bookingRuleMapper;
+    private final BookingRuleMapper bookingRuleMapper = new BookingRuleMapper();;
 
     private final StopTimeMapper stopTimeMapper;
 
@@ -77,8 +75,6 @@ public class GTFSToOtpTransitServiceMapper {
         routeMapper = new RouteMapper(agencyMapper);
         tripMapper = new TripMapper(routeMapper);
 
-        agencyAndIdMapper = new AgencyAndIdMapper();
-        bookingRuleMapper = new BookingRuleMapper();
         stopTimeMapper = new StopTimeMapper(
             stopMapper,
             locationMapper,

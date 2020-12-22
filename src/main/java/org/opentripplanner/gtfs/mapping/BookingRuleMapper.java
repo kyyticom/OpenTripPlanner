@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.opentripplanner.gtfs.mapping.AgencyAndIdMapper.mapAgencyAndId;
+
 /** Responsible for mapping GTFS BookingRule into the OTP model. */
 class BookingRuleMapper {
 
@@ -26,9 +28,8 @@ class BookingRuleMapper {
     }
 
     private BookingRule doMap(org.onebusaway.gtfs.model.BookingRule rhs) {
-        BookingRule lhs = new BookingRule();
+        BookingRule lhs = new BookingRule(mapAgencyAndId(rhs.getId()));
 
-        lhs.setId(AgencyAndIdMapper.mapAgencyAndId(rhs.getId()));
         lhs.setType(rhs.getType());
         lhs.setPriorNoticeDurationMin(rhs.getPriorNoticeDurationMin());
         lhs.setPriorNoticeDurationMax(rhs.getPriorNoticeDurationMax());
@@ -36,7 +37,7 @@ class BookingRuleMapper {
         lhs.setPriorNoticeLastTime(rhs.getPriorNoticeLastTime());
         lhs.setPriorNoticeStartDay(rhs.getPriorNoticeStartDay());
         lhs.setPriorNoticeStartTime(rhs.getPriorNoticeStartTime());
-        lhs.setPriorNoticeServiceId(AgencyAndIdMapper.mapAgencyAndId(rhs.getPriorNoticeServiceId()));
+        lhs.setPriorNoticeServiceId(mapAgencyAndId(rhs.getPriorNoticeServiceId()));
         lhs.setMessage(rhs.getMessage());
         lhs.setPickupMessage(rhs.getPickupMessage());
         lhs.setDropOffMessage(rhs.getDropOffMessage());
