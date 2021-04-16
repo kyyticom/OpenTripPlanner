@@ -45,7 +45,7 @@ public class TripPatternCache {
         // Create TripPattern if it doesn't exist yet
         if (tripPattern == null) {
             // Generate unique code for trip pattern
-            var id = new FeedScopedId(tripPattern.getFeedId(), generateUniqueTripPatternCode(tripPattern));
+            var id = new FeedScopedId(route.getId().getFeedId(), generateUniqueTripPatternCode(tripPattern));
 
             tripPattern = new TripPattern(id, route, stopPattern);
             
