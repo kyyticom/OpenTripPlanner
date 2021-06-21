@@ -184,6 +184,26 @@ public class LegacyGraphQLLegImpl implements LegacyGraphQLDataFetchers.LegacyGra
     return environment -> getSource(environment).interlineWithPreviousLeg;
   }
 
+  public DataFetcher<String> flexDrtPickupMessage() {
+      return environment -> getSource(environment).flexDrtPickupMessage;
+  }
+
+  public DataFetcher<String> flexDrtDropOffMessage() {
+      return environment -> getSource(environment).flexDrtDropOffMessage; 
+  }
+
+  public DataFetcher<String> flexDrtPhoneNumber() {
+      return environment -> getSource(environment).flexDrtPhoneNumber;
+  }
+
+  public DataFetcher<String> flexDrtInfoUrl() {
+      return environment -> getSource(environment).flexDrtInfoUrl;
+  }
+
+  public DataFetcher<String> flexDrtBookingUrl() {
+      return environment -> getSource(environment).flexDrtBookingUrl;
+  }
+
   private RoutingService getRoutingService(DataFetchingEnvironment environment) {
     return environment.<LegacyGraphQLRequestContext>getContext().getRoutingService();
   }

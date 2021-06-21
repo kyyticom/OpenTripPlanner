@@ -4,6 +4,7 @@ import org.opentripplanner.ext.flex.FlexServiceDate;
 import org.opentripplanner.ext.flex.flexpathcalculator.FlexPathCalculator;
 import org.opentripplanner.ext.flex.template.FlexAccessTemplate;
 import org.opentripplanner.ext.flex.template.FlexEgressTemplate;
+import org.opentripplanner.model.BookingRule;
 import org.opentripplanner.model.FlexLocationGroup;
 import org.opentripplanner.model.StopLocation;
 import org.opentripplanner.model.StopTime;
@@ -174,6 +175,9 @@ public class UnscheduledTrip extends FlexTrip<Integer> {
     private final int pickupType;
     private final int dropOffType;
 
+    private final BookingRule pickupBookingRule;
+    private final BookingRule dropOffBookingRule;
+
     private UnscheduledStopTime(StopTime st) {
       stop = st.getStop();
 
@@ -182,6 +186,9 @@ public class UnscheduledTrip extends FlexTrip<Integer> {
 
       pickupType = st.getPickupType();
       dropOffType = st.getDropOffType();
+
+      pickupBookingRule = st.getPickupBookingRule();
+      dropOffBookingRule = st.getDropOffBookingRule();
     }
   }
 }

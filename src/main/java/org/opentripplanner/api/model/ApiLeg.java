@@ -206,6 +206,36 @@ public class ApiLeg {
     public Boolean rentedBike;
 
     /**
+     * If a booking rule is configured, message with pickup booking and boadring
+     * instructions to the passengers using the service. Otherwise is null.
+     */
+    public String flexDrtPickupMessage = null;
+
+    /**
+     * If a booking rule is configured, message with drop-off booking and alighting
+     * instructions to the passenger using the service. Otherwise is null.
+     */
+    public String flexDrtDropOffMessage = null;
+
+    /**
+     * If a booking rule is configured, phone number (E.123) that the passenger could use
+     * to make reservation. Ortherwise is null.  
+     */
+    public String flexDrtPhoneNumber = null;
+
+    /**
+     * If a booking rule is configured, URL pointing to human-readable information about
+     * service terms and conditions of the booking rule. Ortherwise is null. 
+     */
+    public String flexDrtInfoUrl = null;
+
+    /**
+     * If a booking rule is configured, URL pointing either to online interface or
+     * to download the app binary to make a reservation. Ortherwise is null.
+     */
+    public String flexDrtBookingUrl = null;
+
+    /**
      * The leg's duration in seconds
      */
     public double getDuration() {

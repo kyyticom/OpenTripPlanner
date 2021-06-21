@@ -4,10 +4,12 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hasher;
 import org.opentripplanner.model.BikeAccess;
+import org.opentripplanner.model.BookingRule;
 import org.opentripplanner.model.StopTime;
 import org.opentripplanner.model.Trip;
 import org.opentripplanner.routing.api.request.BannedStopSet;
 import org.opentripplanner.routing.api.request.RoutingRequest;
+import org.opentripplanner.routing.core.ServiceDay;
 import org.opentripplanner.routing.core.State;
 import org.opentripplanner.routing.core.TraverseMode;
 import org.slf4j.Logger;
@@ -122,6 +124,11 @@ public class TripTimes implements Serializable, Comparable<TripTimes>, Cloneable
      */
     int[] dropoffs;
 
+    /**
+     * Pickup and drop-off booking rules defined for stop times per GTFS-Flex specs
+     */
+    BookingRule[] pickupBookingRules;
+    BookingRule[] dropOffBookingRules;
 
     /**
      * These are the GTFS stop sequence numbers, which show the order in which the vehicle visits
@@ -157,6 +164,8 @@ public class TripTimes implements Serializable, Comparable<TripTimes>, Cloneable
         timeShift = stopTimes.iterator().next().getArrivalTime();
         final int[] pickups   = new int[nStops];
         final int[] dropoffs   = new int[nStops];
+        final BookingRule[] pickupBookingRules = new BookingRule[nStops];
+        final BookingRule[] dropOffBookingRules = new BookingRule[nStops];
         int s = 0;
         for (final StopTime st : stopTimes) {
             departures[s] = st.getDepartureTime() - timeShift;
@@ -166,6 +175,9 @@ public class TripTimes implements Serializable, Comparable<TripTimes>, Cloneable
 
             pickups[s] = st.getPickupType();
             dropoffs[s] = st.getDropOffType();
+
+            pickupBookingRules[s] = st.getPickupBookingRule();
+            dropOffBookingRules[s] = st.getDropOffBookingRule();
             s++;
         }
         this.scheduledDepartureTimes = deduplicator.deduplicateIntArray(departures);
@@ -357,6 +369,76 @@ public class TripTimes implements Serializable, Comparable<TripTimes>, Cloneable
             return -999;
         }
         return dropoffs[stop];
+    }
+
+    /**
+     * Fetches pickup booking rule corresponding to the stop number in the trip
+     * @param stop - iterator in the trip
+     * @return pickup booking rule with all its properties
+     */
+    public BookingRule getPickupBookingRule(int stop) {
+        return pickupBookingRules[stop];
+    }
+
+    /**
+     * Fetches drop-off booking rule corresponding to the stop number in the trip
+     * @param stop - iterator in the trip
+     * @return drop-off booking rule with all its properties
+     */
+    public BookingRule getDropOffBookingRule(int stop) {
+        return dropOffBookingRules[stop];
+    }
+
+    /**
+     * Calculates the earliest pickup time based on a stop's pickup booking rule (GTFS-Flex v2.1)
+     * @param stop - iterator in the StopTimes collection
+     * @param currTime - current time
+     * @param sd - service day
+     * @return time
+     */
+    public long getEarliestPickupBookingTime (int stop, long currTime, ServiceDay sd) {
+        BookingRule pickupBookingRule = pickupBookingRules[stop];
+        int bookingRuleType = pickupBookingRule.getType();
+        switch (bookingRuleType) {
+            case 0:
+                // Real-time booking only
+                return currTime;
+            case 1:
+                // Up to same-day booking, with advance notice
+                return (long) (currTime + Math.round(pickupBookingRule.getPriorNoticeDurationMin() * 60.0));
+            case 2:
+                // Up to prior day(s) booking
+                int priorNoticeStartDay = pickupBookingRule.getPriorNoticeStartDay();
+                int priorNoticeStartTime = pickupBookingRule.getPriorNoticeStartTime();
+                return sd.time((int) Math.round((priorNoticeStartDay * 24.0 + priorNoticeStartTime) * 60.0));
+        }
+        return currTime;
+    }
+
+    /**
+     * Calculates the latest drop-off time based on a stop's pickup booking rule (GTFS-Flex v2.1)
+     * @param stop - iterator in the StopTimes collection
+     * @param currTime - current time
+     * @param sd - service day
+     * @return time
+     */
+    public long getLatestDropOffBookingTime (int stop, long currTime, ServiceDay sd) {
+        BookingRule dropOffBookingRule = dropOffBookingRules[stop];
+        int bookingRuleType = dropOffBookingRule.getType();
+        switch (bookingRuleType) {
+            case 0:
+                // Real-time booking only
+                return currTime;
+            case 1:
+                // Up to same-day booking, with advance notice
+                return (long) (currTime + Math.round(dropOffBookingRule.getPriorNoticeDurationMax() * 60.0));
+            case 2:
+                // Up to prior day(s) booking
+                int priorNoticeLastDay = dropOffBookingRule.getPriorNoticeLastDay();
+                int priorNoticeLastTime = dropOffBookingRule.getPriorNoticeLastTime();
+                return sd.time((int) Math.round((priorNoticeLastDay * 24.0 + priorNoticeLastTime) * 60.0));
+        }
+        return currTime;
     }
 
     /**
