@@ -29,7 +29,7 @@ class StopMapper {
     if (gtfsStop.getLocationType() != org.onebusaway.gtfs.model.Stop.LOCATION_TYPE_STOP) {
       throw new IllegalArgumentException(
           "Expected type " + org.onebusaway.gtfs.model.Stop.LOCATION_TYPE_STOP + ", but got "
-              + gtfsStop.getLocationType() + "for stop " + gtfsStop.toString());
+              + gtfsStop.getLocationType() + " for stop " + gtfsStop.toString());
     }
 
     StopMappingWrapper base = new StopMappingWrapper(gtfsStop);
